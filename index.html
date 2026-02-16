@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Mahindra University - JUNO ERP</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+margin:0;
+font-family: "Segoe UI", Arial, sans-serif;
+background:#f3f5f7;
+}
+
+/* ===== HEADER ===== */
+.topbar{
+background:#1e5f94;
+height:65px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 30px;
+color:white;
+font-size:15px;
+}
+
+.logo{
+font-weight:600;
+letter-spacing:1px;
+}
+
+.user{
+font-weight:500;
+}
+
+/* ===== NAVIGATION ===== */
+.nav{
+background:white;
+padding:12px 30px;
+border-bottom:1px solid #ddd;
+font-size:14px;
+color:#444;
+}
+
+.nav span{
+margin-right:30px;
+cursor:pointer;
+}
+
+/* ===== PAGE WRAPPER ===== */
+.wrapper{
+padding:20px 30px;
+}
+
+/* TERM BOX */
+.term-box{
+background:#eef1f4;
+padding:18px;
+border-radius:8px;
+margin-bottom:20px;
+}
+
+/* MAIN TABS */
+.tabs{
+margin-bottom:20px;
+}
+
+.tab{
+display:inline-block;
+padding:8px 20px;
+background:#e5e9ed;
+border-radius:20px;
+margin-right:10px;
+font-size:14px;
+}
+
+.tab.active{
+background:#2f95c8;
+color:white;
+}
+
+/* CONTENT LAYOUT */
+.content{
+display:flex;
+gap:20px;
+}
+
+/* LEFT PANEL */
+.sidebar{
+width:30%;
+background:white;
+border-radius:10px;
+border:1px solid #ddd;
+padding:15px;
+}
+
+.sidebar h4{
+margin-top:0;
+color:#333;
+}
+
+.course{
+padding:10px;
+margin:6px 0;
+border-radius:6px;
+cursor:pointer;
+}
+
+.course.active{
+background:#dceaf5;
+font-weight:600;
+}
+
+.course:hover{
+background:#eef4f9;
+}
+
+/* RIGHT PANEL */
+.main{
+width:70%;
+background:white;
+border-radius:10px;
+border:1px solid #ddd;
+padding:20px;
+}
+
+/* Selected Course Header */
+.selected{
+display:flex;
+justify-content:space-between;
+font-weight:600;
+margin-bottom:15px;
+}
+
+/* INNER TABS */
+.inner-tabs{
+margin-bottom:15px;
+}
+
+.inner-tabs span{
+margin-right:20px;
+padding:6px 14px;
+border-radius:20px;
+background:#e5e9ed;
+font-size:13px;
+}
+
+.inner-tabs .active{
+background:#2f95c8;
+color:white;
+}
+
+/* TABLE */
+table{
+width:100%;
+border-collapse:collapse;
+font-size:14px;
+}
+
+th{
+background:#f0f2f4;
+padding:10px;
+text-align:left;
+border-bottom:1px solid #ddd;
+}
+
+td{
+padding:10px;
+border-bottom:1px solid #eee;
+}
+
+input{
+width:60px;
+padding:5px;
+}
+
+button{
+margin-top:15px;
+padding:8px 15px;
+background:#2f95c8;
+color:white;
+border:none;
+border-radius:4px;
+cursor:pointer;
+}
+
+button:hover{
+background:#1e78a5;
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="topbar">
+<div class="logo">JUNO Campus</div>
+<div class="user">Noti Srikar Reddy | Student</div>
+</div>
+
+<!-- NAVIGATION -->
+<div class="nav">
+<span>Personal</span>
+<span>Academic Functions</span>
+<span>Communication</span>
+<span>Student Academic Fees Payment</span>
+<span>Student Hostel Fees Details</span>
+</div>
+
+<div class="wrapper">
+
+<div class="term-box">
+<b>Term:</b> Sem I
+</div>
+
+<div class="tabs">
+<span class="tab">Courses</span>
+<span class="tab">Schedule</span>
+<span class="tab">Attendance</span>
+<span class="tab active">Marks</span>
+<span class="tab">Assessment</span>
+<span class="tab">Shared Contents</span>
+</div>
+
+<div class="content">
+
+<!-- LEFT SIDE -->
+<div class="sidebar">
+<h4>Course List</h4>
+
+<div class="course active">HS1103 - FRENCH-I</div>
+<div class="course">MA1101 - CALCULUS & ODE</div>
+<div class="course">CE1101 - EARTH AND ENVIRONMENTAL SCIENCES</div>
+<div class="course">CS1001 - INTRODUCTION TO COMPUTING</div>
+</div>
+
+<!-- RIGHT SIDE -->
+<div class="main">
+
+<div class="selected">
+<div>Selected Course : HS1103 - FRENCH-I</div>
+<div>Marks : <span id="totalMarks">0</span>/100</div>
+</div>
+
+<div class="inner-tabs">
+<span class="active">Overview</span>
+<span>Component marks</span>
+</div>
+
+<h4>Parameter-wise summary</h4>
+
+<table>
+<tr>
+<th>Sr. No.</th>
+<th>Parameter</th>
+<th>Out of Marks</th>
+<th>Status</th>
+<th>Final mark shown?</th>
+</tr>
+
+<tr>
+<td>1</td>
+<td>Mid Term</td>
+<td>40</td>
+<td>Completed</td>
+<td><input type="number" id="mid" max="40"></td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>End Term</td>
+<td>60</td>
+<td>Completed</td>
+<td><input type="number" id="end" max="60"></td>
+</tr>
+
+</table>
+
+<button onclick="saveMarks()">Save Marks</button>
+
+</div>
+
+</div>
+</div>
+
+<script>
+function saveMarks(){
+let mid=parseInt(document.getElementById("mid").value)||0;
+let end=parseInt(document.getElementById("end").value)||0;
+
+if(mid>40 || end>60){
+alert("Marks exceed allowed limit");
+return;
+}
+
+document.getElementById("totalMarks").innerText = mid + end;
+}
+</script>
+
+</body>
+</html>
