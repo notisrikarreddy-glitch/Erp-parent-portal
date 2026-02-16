@@ -2,108 +2,50 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Mahindra University - JUNO ERP</title>
+<title>JUNO ERP - Advanced</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 body{
 margin:0;
-font-family: "Segoe UI", Arial, sans-serif;
+font-family:Segoe UI, Arial, sans-serif;
 background:#f3f5f7;
 }
 
-/* ===== HEADER ===== */
 .topbar{
 background:#1e5f94;
-height:65px;
-display:flex;
-align-items:center;
-justify-content:space-between;
-padding:0 30px;
 color:white;
-font-size:15px;
-}
-
-.logo{
+padding:15px 30px;
+display:flex;
+justify-content:space-between;
 font-weight:600;
-letter-spacing:1px;
 }
 
-.user{
-font-weight:500;
-}
-
-/* ===== NAVIGATION ===== */
-.nav{
-background:white;
-padding:12px 30px;
-border-bottom:1px solid #ddd;
-font-size:14px;
-color:#444;
-}
-
-.nav span{
-margin-right:30px;
-cursor:pointer;
-}
-
-/* ===== PAGE WRAPPER ===== */
 .wrapper{
 padding:20px 30px;
 }
 
-/* TERM BOX */
-.term-box{
-background:#eef1f4;
-padding:18px;
-border-radius:8px;
-margin-bottom:20px;
-}
-
-/* MAIN TABS */
-.tabs{
-margin-bottom:20px;
-}
-
-.tab{
-display:inline-block;
-padding:8px 20px;
-background:#e5e9ed;
-border-radius:20px;
-margin-right:10px;
-font-size:14px;
-}
-
-.tab.active{
-background:#2f95c8;
-color:white;
-}
-
-/* CONTENT LAYOUT */
 .content{
 display:flex;
 gap:20px;
 }
 
-/* LEFT PANEL */
 .sidebar{
 width:30%;
 background:white;
 border-radius:10px;
 border:1px solid #ddd;
 padding:15px;
-}
-
-.sidebar h4{
-margin-top:0;
-color:#333;
+height:500px;
+overflow-y:auto;
 }
 
 .course{
-padding:10px;
-margin:6px 0;
+padding:8px;
+margin:5px 0;
 border-radius:6px;
 cursor:pointer;
+font-size:14px;
 }
 
 .course.active{
@@ -111,11 +53,6 @@ background:#dceaf5;
 font-weight:600;
 }
 
-.course:hover{
-background:#eef4f9;
-}
-
-/* RIGHT PANEL */
 .main{
 width:70%;
 background:white;
@@ -124,177 +61,233 @@ border:1px solid #ddd;
 padding:20px;
 }
 
-/* Selected Course Header */
 .selected{
 display:flex;
 justify-content:space-between;
 font-weight:600;
-margin-bottom:15px;
+margin-bottom:10px;
 }
 
-/* INNER TABS */
-.inner-tabs{
-margin-bottom:15px;
-}
-
-.inner-tabs span{
-margin-right:20px;
-padding:6px 14px;
-border-radius:20px;
-background:#e5e9ed;
-font-size:13px;
-}
-
-.inner-tabs .active{
-background:#2f95c8;
-color:white;
-}
-
-/* TABLE */
 table{
 width:100%;
 border-collapse:collapse;
+margin-top:10px;
 font-size:14px;
+}
+
+th,td{
+border-bottom:1px solid #eee;
+padding:8px;
 }
 
 th{
 background:#f0f2f4;
-padding:10px;
-text-align:left;
-border-bottom:1px solid #ddd;
-}
-
-td{
-padding:10px;
-border-bottom:1px solid #eee;
 }
 
 input{
-width:60px;
-padding:5px;
+width:70px;
+padding:4px;
+}
+
+.gpa-box{
+margin-top:15px;
+padding:10px;
+background:#eef1f4;
+border-radius:6px;
+font-weight:600;
 }
 
 button{
-margin-top:15px;
-padding:8px 15px;
+margin-top:10px;
+padding:6px 12px;
 background:#2f95c8;
 color:white;
 border:none;
 border-radius:4px;
 cursor:pointer;
 }
-
-button:hover{
-background:#1e78a5;
-}
 </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
 <div class="topbar">
-<div class="logo">JUNO Campus</div>
-<div class="user">Noti Srikar Reddy | Student</div>
-</div>
-
-<!-- NAVIGATION -->
-<div class="nav">
-<span>Personal</span>
-<span>Academic Functions</span>
-<span>Communication</span>
-<span>Student Academic Fees Payment</span>
-<span>Student Hostel Fees Details</span>
+<div>JUNO Campus</div>
+<div>Overall GPA: <span id="overallGPA">0.00</span></div>
 </div>
 
 <div class="wrapper">
-
-<div class="term-box">
-<b>Term:</b> Sem I
-</div>
-
-<div class="tabs">
-<span class="tab">Courses</span>
-<span class="tab">Schedule</span>
-<span class="tab">Attendance</span>
-<span class="tab active">Marks</span>
-<span class="tab">Assessment</span>
-<span class="tab">Shared Contents</span>
-</div>
-
 <div class="content">
 
-<!-- LEFT SIDE -->
-<div class="sidebar">
-<h4>Course List</h4>
+<div class="sidebar" id="courseList"></div>
 
-<div class="course active">HS1103 - FRENCH-I</div>
-<div class="course">MA1101 - CALCULUS & ODE</div>
-<div class="course">CE1101 - EARTH AND ENVIRONMENTAL SCIENCES</div>
-<div class="course">CS1001 - INTRODUCTION TO COMPUTING</div>
-</div>
-
-<!-- RIGHT SIDE -->
 <div class="main">
-
 <div class="selected">
-<div>Selected Course : HS1103 - FRENCH-I</div>
-<div>Marks : <span id="totalMarks">0</span>/100</div>
+<div id="selectedCourse"></div>
+<div>Marks: <span id="totalMarks">0</span>/100</div>
 </div>
 
-<div class="inner-tabs">
-<span class="active">Overview</span>
-<span>Component marks</span>
+<table id="marksTable"></table>
+
+<button onclick="saveMarks()">Save</button>
+
+<div class="gpa-box">
+Grade: <span id="grade">-</span>
 </div>
 
-<h4>Parameter-wise summary</h4>
-
-<table>
-<tr>
-<th>Sr. No.</th>
-<th>Parameter</th>
-<th>Out of Marks</th>
-<th>Status</th>
-<th>Final mark shown?</th>
-</tr>
-
-<tr>
-<td>1</td>
-<td>Mid Term</td>
-<td>40</td>
-<td>Completed</td>
-<td><input type="number" id="mid" max="40"></td>
-</tr>
-
-<tr>
-<td>2</td>
-<td>End Term</td>
-<td>60</td>
-<td>Completed</td>
-<td><input type="number" id="end" max="60"></td>
-</tr>
-
-</table>
-
-<button onclick="saveMarks()">Save Marks</button>
-
 </div>
-
 </div>
 </div>
 
 <script>
+
+const subjects = {
+"HS1101 - ENGLISH":[
+{name:"Mid Term II",max:20},
+{name:"Assignment",max:30},
+{name:"End Term",max:50}
+],
+"HS1103 - FRENCH-I":[
+{name:"Mid Term",max:40},
+{name:"End Term",max:60}
+],
+"CS1001 - INTRODUCTION TO COMPUTING":[
+{name:"Mid Term I",max:15},
+{name:"Mid Term II",max:15},
+{name:"End Term",max:40},
+{name:"Lab Exam",max:20},
+{name:"Lab Participation",max:10}
+],
+"MA1101 - CALCULUS AND ODE":[
+{name:"Mid Term I",max:20},
+{name:"Mid Term II",max:20},
+{name:"End Term",max:40},
+{name:"Internal Assessment",max:20}
+],
+"CE1101 - EARTH AND ENVIRONMENTAL SCIENCES":[
+{name:"Mid Term",max:30},
+{name:"Offline Quiz",max:10},
+{name:"Assignment",max:10},
+{name:"End Term",max:50}
+],
+"EC1101 - INTRODUCTION TO ELECTRICAL AND ELECTRONICS ENGINEERING":[
+{name:"Mid Term I",max:25},
+{name:"Mid Term II",max:25},
+{name:"Assignment",max:10},
+{name:"End Term",max:40}
+],
+"CH1101 - QUANTAM CHEMISTRY AND SPECTROSCOPY":[
+{name:"Internal Assessment",max:10},
+{name:"Mid Term II",max:15},
+{name:"End Term",max:40},
+{name:"Lab Exam",max:20},
+{name:"Mid Term",max:15}
+],
+"ET1101F - INTRODUCTION TO ENTREPRENEURSHIP":[
+{name:"Offline Quiz",max:15},
+{name:"Project",max:40},
+{name:"Assignment",max:30},
+{name:"Class Participation",max:15}
+],
+"HS1102 - MEDIA PROJECT":[
+{name:"Assignment",max:30},
+{name:"Project",max:70}
+]
+};
+
+let selected = Object.keys(subjects)[0];
+let data = JSON.parse(localStorage.getItem("erpData")) || {};
+
+function renderCourses(){
+const list=document.getElementById("courseList");
+list.innerHTML="";
+Object.keys(subjects).forEach(sub=>{
+let div=document.createElement("div");
+div.className="course";
+div.innerText=sub;
+if(sub===selected) div.classList.add("active");
+div.onclick=()=>{selected=sub;render();};
+list.appendChild(div);
+});
+}
+
+function render(){
+renderCourses();
+document.getElementById("selectedCourse").innerText="Selected Course: "+selected;
+
+let table=document.getElementById("marksTable");
+table.innerHTML="<tr><th>Parameter</th><th>Out of</th><th>Marks</th></tr>";
+
+let total=0;
+let maxTotal=0;
+
+subjects[selected].forEach((item,i)=>{
+if(!data[selected]) data[selected]={};
+if(!data[selected][i]) data[selected][i]=0;
+
+total+=parseFloat(data[selected][i])||0;
+maxTotal+=item.max;
+
+table.innerHTML+=`
+<tr>
+<td>${item.name}</td>
+<td>${item.max}</td>
+<td><input type="number" step="0.01" value="${data[selected][i]}"
+oninput="updateMark(${i},this.value)"></td>
+</tr>
+`;
+});
+
+document.getElementById("totalMarks").innerText=total.toFixed(2);
+calculateGrade(total);
+calculateOverallGPA();
+}
+
+function updateMark(index,value){
+if(!data[selected]) data[selected]={};
+data[selected][index]=parseFloat(value)||0;
+render();
+}
+
+function calculateGrade(total){
+let grade="-";
+if(total>=90) grade="A+";
+else if(total>=80) grade="A";
+else if(total>=70) grade="B";
+else if(total>=60) grade="C";
+else if(total>=50) grade="D";
+else grade="F";
+document.getElementById("grade").innerText=grade;
+}
+
+function calculateOverallGPA(){
+let totalGPA=0;
+let count=0;
+
+Object.keys(data).forEach(sub=>{
+let sum=Object.values(data[sub]).reduce((a,b)=>a+(parseFloat(b)||0),0);
+let gpa=0;
+if(sum>=90) gpa=10;
+else if(sum>=80) gpa=9;
+else if(sum>=70) gpa=8;
+else if(sum>=60) gpa=7;
+else if(sum>=50) gpa=6;
+else gpa=5;
+totalGPA+=gpa;
+count++;
+});
+
+document.getElementById("overallGPA").innerText=
+count? (totalGPA/count).toFixed(2) : "0.00";
+}
+
 function saveMarks(){
-let mid=parseInt(document.getElementById("mid").value)||0;
-let end=parseInt(document.getElementById("end").value)||0;
-
-if(mid>40 || end>60){
-alert("Marks exceed allowed limit");
-return;
+localStorage.setItem("erpData",JSON.stringify(data));
+alert("Marks Saved Successfully");
 }
 
-document.getElementById("totalMarks").innerText = mid + end;
-}
+render();
+
 </script>
 
 </body>
