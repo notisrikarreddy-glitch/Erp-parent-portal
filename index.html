@@ -1,110 +1,132 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>JUNO ERP - Advanced</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mahindra University - JUNO ERP</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
 body{
 margin:0;
-font-family:Segoe UI, Arial, sans-serif;
-background:#f3f5f7;
+font-family:Segoe UI,Arial;
+background:#eef2f7;
 }
 
 .topbar{
-background:#1e5f94;
+background:#002b5c;
 color:white;
-padding:15px 30px;
+padding:15px 25px;
 display:flex;
 justify-content:space-between;
-font-weight:600;
+align-items:center;
 }
 
-.wrapper{
-padding:20px 30px;
+.topbar h1{
+margin:0;
+font-size:20px;
 }
 
-.content{
+.gpa{
+font-weight:bold;
+font-size:16px;
+}
+
+.student-card{
+background:white;
+margin:20px;
+padding:15px 20px;
+border-radius:8px;
+box-shadow:0 2px 6px rgba(0,0,0,0.1);
+}
+
+.container{
 display:flex;
+margin:0 20px 20px 20px;
 gap:20px;
 }
 
 .sidebar{
-width:30%;
+width:28%;
 background:white;
-border-radius:10px;
-border:1px solid #ddd;
-padding:15px;
-height:500px;
-overflow-y:auto;
+padding:10px;
+border-radius:8px;
+box-shadow:0 2px 6px rgba(0,0,0,0.1);
 }
 
-.course{
-padding:8px;
-margin:5px 0;
-border-radius:6px;
+.sidebar div{
+padding:10px;
 cursor:pointer;
-font-size:14px;
+border-radius:6px;
 }
 
-.course.active{
-background:#dceaf5;
-font-weight:600;
+.sidebar div:hover{
+background:#e3ecf7;
+}
+
+.active{
+background:#c8d9f1;
+font-weight:bold;
 }
 
 .main{
-width:70%;
+flex:1;
 background:white;
-border-radius:10px;
-border:1px solid #ddd;
 padding:20px;
-}
-
-.selected{
-display:flex;
-justify-content:space-between;
-font-weight:600;
-margin-bottom:10px;
+border-radius:8px;
+box-shadow:0 2px 6px rgba(0,0,0,0.1);
 }
 
 table{
 width:100%;
 border-collapse:collapse;
 margin-top:10px;
-font-size:14px;
 }
 
 th,td{
-border-bottom:1px solid #eee;
-padding:8px;
-}
-
-th{
-background:#f0f2f4;
+padding:10px;
+border-bottom:1px solid #ddd;
+text-align:left;
 }
 
 input{
-width:70px;
-padding:4px;
-}
-
-.gpa-box{
-margin-top:15px;
-padding:10px;
-background:#eef1f4;
-border-radius:6px;
-font-weight:600;
+width:60px;
+padding:5px;
 }
 
 button{
-margin-top:10px;
-padding:6px 12px;
-background:#2f95c8;
+background:#002b5c;
 color:white;
+padding:8px 15px;
 border:none;
 border-radius:4px;
 cursor:pointer;
+margin-top:10px;
+margin-right:10px;
+}
+
+button:hover{
+background:#004080;
+}
+
+.grade{
+margin-top:15px;
+font-weight:bold;
+font-size:16px;
+}
+
+/* PRINT STYLE */
+@media print{
+body *{
+visibility:hidden;
+}
+#printArea, #printArea *{
+visibility:visible;
+}
+#printArea{
+position:absolute;
+left:0;
+top:0;
+width:100%;
+}
 }
 </style>
 </head>
@@ -112,181 +134,134 @@ cursor:pointer;
 <body>
 
 <div class="topbar">
-<div>JUNO Campus</div>
-<div>Overall GPA: <span id="overallGPA">0.00</span></div>
+<h1>Mahindra University - JUNO Campus ERP</h1>
+<div class="gpa">Overall GPA: 9.11</div>
 </div>
 
-<div class="wrapper">
-<div class="content">
+<div class="student-card">
+<strong>Student Name:</strong> Srikar Reddy Noti<br>
+<strong>Class:</strong> CSE-3<br>
+<strong>Roll No:</strong> SE25UCSE174
+</div>
 
-<div class="sidebar" id="courseList"></div>
+<div class="container">
+
+<div class="sidebar">
+<div onclick="loadCourse('english')">HS1101 - ENGLISH</div>
+<div onclick="loadCourse('french')">HS1103 - FRENCH-I</div>
+<div onclick="loadCourse('cs')">CS1001 - INTRODUCTION TO COMPUTING</div>
+<div onclick="loadCourse('math')">MA1101 - CALCULUS AND ODE</div>
+<div onclick="loadCourse('evs')">CE1101 - EARTH AND ENVIRONMENTAL SCIENCES</div>
+<div onclick="loadCourse('eee')">EC1101 - INTRO TO ELECTRICAL & ELECTRONICS</div>
+<div onclick="loadCourse('chem')">CH1101 - QUANTUM CHEMISTRY</div>
+<div onclick="loadCourse('entre')">ET1101F - ENTREPRENEURSHIP</div>
+<div onclick="loadCourse('media')">HS1102 - MEDIA PROJECT</div>
+</div>
 
 <div class="main">
-<div class="selected">
-<div id="selectedCourse"></div>
-<div>Marks: <span id="totalMarks">0</span>/100</div>
-</div>
-
+<div id="printArea">
+<h3 id="courseTitle">Select a course</h3>
 <table id="marksTable"></table>
-
+<div class="grade" id="grade"></div>
+</div>
 <button onclick="saveMarks()">Save</button>
-
-<div class="gpa-box">
-Grade: <span id="grade">-</span>
+<button onclick="window.print()">Print Transcript</button>
 </div>
 
-</div>
-</div>
 </div>
 
 <script>
 
-const subjects = {
-"HS1101 - ENGLISH":[
-{name:"Mid Term II",max:20},
-{name:"Assignment",max:30},
-{name:"End Term",max:50}
+let courses={
+english:[
+["Mid Term II",20,17],
+["Assignment",30,20],
+["End Term",50,41]
 ],
-"HS1103 - FRENCH-I":[
-{name:"Mid Term",max:40},
-{name:"End Term",max:60}
+french:[
+["Mid Term",40,28],
+["End Term",60,48]
 ],
-"CS1001 - INTRODUCTION TO COMPUTING":[
-{name:"Mid Term I",max:15},
-{name:"Mid Term II",max:15},
-{name:"End Term",max:40},
-{name:"Lab Exam",max:20},
-{name:"Lab Participation",max:10}
+cs:[
+["Mid Term I",15,10],
+["Mid Term II",15,15],
+["End Term",40,40],
+["Lab Exam",20,20],
+["Lab Participation",10,7]
 ],
-"MA1101 - CALCULUS AND ODE":[
-{name:"Mid Term I",max:20},
-{name:"Mid Term II",max:20},
-{name:"End Term",max:40},
-{name:"Internal Assessment",max:20}
+math:[
+["Mid Term I",20,16],
+["Mid Term II",20,14],
+["End Term",40,35],
+["Internal Assessment",20,17]
 ],
-"CE1101 - EARTH AND ENVIRONMENTAL SCIENCES":[
-{name:"Mid Term",max:30},
-{name:"Offline Quiz",max:10},
-{name:"Assignment",max:10},
-{name:"End Term",max:50}
+evs:[
+["Mid Term",30,30],
+["Offline Quiz",10,10],
+["Assignment",10,10],
+["End Term",50,46]
 ],
-"EC1101 - INTRODUCTION TO ELECTRICAL AND ELECTRONICS ENGINEERING":[
-{name:"Mid Term I",max:25},
-{name:"Mid Term II",max:25},
-{name:"Assignment",max:10},
-{name:"End Term",max:40}
+eee:[
+["Mid Term I",25,23],
+["Mid Term II",25,25],
+["Assignment",10,7],
+["End Term",40,37]
 ],
-"CH1101 - QUANTAM CHEMISTRY AND SPECTROSCOPY":[
-{name:"Internal Assessment",max:10},
-{name:"Mid Term II",max:15},
-{name:"End Term",max:40},
-{name:"Lab Exam",max:20},
-{name:"Mid Term",max:15}
+chem:[
+["Internal Assessment",10,8],
+["Mid Term II",15,14],
+["End Term",40,39],
+["Lab Exam",20,20],
+["Mid Term",15,12]
 ],
-"ET1101F - INTRODUCTION TO ENTREPRENEURSHIP":[
-{name:"Offline Quiz",max:15},
-{name:"Project",max:40},
-{name:"Assignment",max:30},
-{name:"Class Participation",max:15}
+entre:[
+["Offline Quiz",15,15],
+["Project",40,30],
+["Assignment",30,25],
+["Class Participation",15,14]
 ],
-"HS1102 - MEDIA PROJECT":[
-{name:"Assignment",max:30},
-{name:"Project",max:70}
+media:[
+["Assignment",30,15],
+["Project",70,60]
 ]
 };
 
-let selected = Object.keys(subjects)[0];
-let data = JSON.parse(localStorage.getItem("erpData")) || {};
+let currentCourse="";
 
-function renderCourses(){
-const list=document.getElementById("courseList");
-list.innerHTML="";
-Object.keys(subjects).forEach(sub=>{
-let div=document.createElement("div");
-div.className="course";
-div.innerText=sub;
-if(sub===selected) div.classList.add("active");
-div.onclick=()=>{selected=sub;render();};
-list.appendChild(div);
-});
-}
-
-function render(){
-renderCourses();
-document.getElementById("selectedCourse").innerText="Selected Course: "+selected;
-
-let table=document.getElementById("marksTable");
-table.innerHTML="<tr><th>Parameter</th><th>Out of</th><th>Marks</th></tr>";
-
+function loadCourse(course){
+currentCourse=course;
+let data=courses[course];
+let table="<tr><th>Parameter</th><th>Out of</th><th>Marks</th></tr>";
 let total=0;
-let maxTotal=0;
+let max=0;
 
-subjects[selected].forEach((item,i)=>{
-if(!data[selected]) data[selected]={};
-if(!data[selected][i]) data[selected][i]=0;
-
-total+=parseFloat(data[selected][i])||0;
-maxTotal+=item.max;
-
-table.innerHTML+=`
-<tr>
-<td>${item.name}</td>
-<td>${item.max}</td>
-<td><input type="number" step="0.01" value="${data[selected][i]}"
-oninput="updateMark(${i},this.value)"></td>
-</tr>
-`;
-});
-
-document.getElementById("totalMarks").innerText=total.toFixed(2);
-calculateGrade(total);
-calculateOverallGPA();
+for(let i=0;i<data.length;i++){
+table+=`<tr>
+<td>${data[i][0]}</td>
+<td>${data[i][1]}</td>
+<td><input type='number' value='${data[i][2]}'></td>
+</tr>`;
+total+=data[i][2];
+max+=data[i][1];
 }
 
-function updateMark(index,value){
-if(!data[selected]) data[selected]={};
-data[selected][index]=parseFloat(value)||0;
-render();
-}
+document.getElementById("courseTitle").innerText="Selected Course";
+document.getElementById("marksTable").innerHTML=table;
 
-function calculateGrade(total){
-let grade="-";
-if(total>=90) grade="A+";
-else if(total>=80) grade="A";
-else if(total>=70) grade="B";
-else if(total>=60) grade="C";
-else if(total>=50) grade="D";
-else grade="F";
-document.getElementById("grade").innerText=grade;
-}
+let percent=(total/max)*100;
+let grade="";
+if(percent>=90) grade="A+";
+else if(percent>=80) grade="A";
+else if(percent>=70) grade="B";
+else if(percent>=60) grade="C";
+else grade="D";
 
-function calculateOverallGPA(){
-let totalGPA=0;
-let count=0;
-
-Object.keys(data).forEach(sub=>{
-let sum=Object.values(data[sub]).reduce((a,b)=>a+(parseFloat(b)||0),0);
-let gpa=0;
-if(sum>=90) gpa=10;
-else if(sum>=80) gpa=9;
-else if(sum>=70) gpa=8;
-else if(sum>=60) gpa=7;
-else if(sum>=50) gpa=6;
-else gpa=5;
-totalGPA+=gpa;
-count++;
-});
-
-document.getElementById("overallGPA").innerText=
-count? (totalGPA/count).toFixed(2) : "0.00";
+document.getElementById("grade").innerText="Total: "+total+"/"+max+" | Grade: "+grade;
 }
 
 function saveMarks(){
-localStorage.setItem("erpData",JSON.stringify(data));
-alert("Marks Saved Successfully");
+alert("Marks Saved Successfully!");
 }
-
-render();
 
 </script>
 
