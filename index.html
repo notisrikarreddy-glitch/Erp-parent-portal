@@ -11,6 +11,49 @@ font-family:Segoe UI,Arial;
 background:#eef2f7;
 }
 
+/* LOGIN SCREEN */
+
+#loginPage{
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+background:#002b5c;
+color:white;
+flex-direction:column;
+}
+
+.loginBox{
+background:white;
+color:black;
+padding:30px;
+border-radius:8px;
+width:300px;
+text-align:center;
+}
+
+.loginBox input{
+width:90%;
+padding:8px;
+margin:10px 0;
+}
+
+.loginBox button{
+background:#002b5c;
+color:white;
+padding:8px 15px;
+border:none;
+cursor:pointer;
+}
+
+/* MAIN ERP */
+
+#mainContent{
+display:none;
+}
+
+/* HEADER */
+
 .topbar{
 background:#002b5c;
 color:white;
@@ -18,16 +61,18 @@ padding:15px 25px;
 display:flex;
 justify-content:space-between;
 align-items:center;
+position:relative;
 }
 
-.topbar h1{
-margin:0;
-font-size:20px;
-}
-
-.gpa{
-font-weight:bold;
-font-size:16px;
+.watermark{
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%, -50%);
+font-size:80px;
+color:rgba(0,0,0,0.05);
+z-index:0;
+pointer-events:none;
 }
 
 .student-card{
@@ -36,84 +81,41 @@ margin:20px;
 padding:15px 20px;
 border-radius:8px;
 box-shadow:0 2px 6px rgba(0,0,0,0.1);
+position:relative;
+z-index:1;
 }
 
 .container{
-display:flex;
-margin:0 20px 20px 20px;
-gap:20px;
-}
-
-.sidebar{
-width:28%;
-background:white;
-padding:10px;
-border-radius:8px;
-box-shadow:0 2px 6px rgba(0,0,0,0.1);
-}
-
-.sidebar div{
-padding:10px;
-cursor:pointer;
-border-radius:6px;
-}
-
-.sidebar div:hover{
-background:#e3ecf7;
-}
-
-.active{
-background:#c8d9f1;
-font-weight:bold;
-}
-
-.main{
-flex:1;
+margin:20px;
 background:white;
 padding:20px;
 border-radius:8px;
 box-shadow:0 2px 6px rgba(0,0,0,0.1);
+position:relative;
+z-index:1;
 }
 
 table{
 width:100%;
 border-collapse:collapse;
-margin-top:10px;
 }
 
 th,td{
 padding:10px;
 border-bottom:1px solid #ddd;
-text-align:left;
 }
 
-input{
-width:60px;
-padding:5px;
-}
-
-button{
+.printBtn{
 background:#002b5c;
 color:white;
 padding:8px 15px;
 border:none;
-border-radius:4px;
 cursor:pointer;
-margin-top:10px;
-margin-right:10px;
-}
-
-button:hover{
-background:#004080;
-}
-
-.grade{
 margin-top:15px;
-font-weight:bold;
-font-size:16px;
 }
 
-/* PRINT STYLE */
+/* PRINT ONLY TRANSCRIPT */
+
 @media print{
 body *{
 visibility:hidden;
@@ -133,9 +135,23 @@ width:100%;
 
 <body>
 
+<div id="loginPage">
+<h2>Mahindra University JUNO ERP</h2>
+<div class="loginBox">
+<input type="text" id="username" placeholder="Username">
+<input type="password" id="password" placeholder="Password">
+<button onclick="login()">Login</button>
+<p id="error" style="color:red;"></p>
+</div>
+</div>
+
+<div id="mainContent">
+
+<div class="watermark">MAHINDRA UNIVERSITY</div>
+
 <div class="topbar">
-<h1>Mahindra University - JUNO Campus ERP</h1>
-<div class="gpa">Overall GPA: 9.11</div>
+<h2>Mahindra University - Official Transcript</h2>
+<div>Overall GPA: <b>9.11</b></div>
 </div>
 
 <div class="student-card">
@@ -144,123 +160,44 @@ width:100%;
 <strong>Roll No:</strong> SE25UCSE174
 </div>
 
-<div class="container">
+<div class="container" id="printArea">
 
-<div class="sidebar">
-<div onclick="loadCourse('english')">HS1101 - ENGLISH</div>
-<div onclick="loadCourse('french')">HS1103 - FRENCH-I</div>
-<div onclick="loadCourse('cs')">CS1001 - INTRODUCTION TO COMPUTING</div>
-<div onclick="loadCourse('math')">MA1101 - CALCULUS AND ODE</div>
-<div onclick="loadCourse('evs')">CE1101 - EARTH AND ENVIRONMENTAL SCIENCES</div>
-<div onclick="loadCourse('eee')">EC1101 - INTRO TO ELECTRICAL & ELECTRONICS</div>
-<div onclick="loadCourse('chem')">CH1101 - QUANTUM CHEMISTRY</div>
-<div onclick="loadCourse('entre')">ET1101F - ENTREPRENEURSHIP</div>
-<div onclick="loadCourse('media')">HS1102 - MEDIA PROJECT</div>
-</div>
+<h3>Semester I Result Summary</h3>
 
-<div class="main">
-<div id="printArea">
-<h3 id="courseTitle">Select a course</h3>
-<table id="marksTable"></table>
-<div class="grade" id="grade"></div>
-</div>
-<button onclick="saveMarks()">Save</button>
-<button onclick="window.print()">Print Transcript</button>
+<table>
+<tr><th>Subject</th><th>Total Marks</th><th>Grade</th></tr>
+
+<tr><td>HS1101 - ENGLISH</td><td>78</td><td>B</td></tr>
+<tr><td>HS1103 - FRENCH-I</td><td>76</td><td>B</td></tr>
+<tr><td>CS1001 - INTRODUCTION TO COMPUTING</td><td>92</td><td>A+</td></tr>
+<tr><td>MA1101 - CALCULUS AND ODE</td><td>82</td><td>A</td></tr>
+<tr><td>CE1101 - EARTH AND ENVIRONMENTAL SCIENCES</td><td>96</td><td>A+</td></tr>
+<tr><td>EC1101 - INTRO TO ELECTRICAL & ELECTRONICS</td><td>92</td><td>A+</td></tr>
+<tr><td>CH1101 - QUANTUM CHEMISTRY</td><td>93</td><td>A+</td></tr>
+<tr><td>ET1101F - ENTREPRENEURSHIP</td><td>84</td><td>A</td></tr>
+<tr><td>HS1102 - MEDIA PROJECT</td><td>75</td><td>B</td></tr>
+
+</table>
+
+<button class="printBtn" onclick="window.print()">Print Transcript</button>
+
 </div>
 
 </div>
 
 <script>
 
-let courses={
-english:[
-["Mid Term II",20,17],
-["Assignment",30,20],
-["End Term",50,41]
-],
-french:[
-["Mid Term",40,28],
-["End Term",60,48]
-],
-cs:[
-["Mid Term I",15,10],
-["Mid Term II",15,15],
-["End Term",40,40],
-["Lab Exam",20,20],
-["Lab Participation",10,7]
-],
-math:[
-["Mid Term I",20,16],
-["Mid Term II",20,14],
-["End Term",40,35],
-["Internal Assessment",20,17]
-],
-evs:[
-["Mid Term",30,30],
-["Offline Quiz",10,10],
-["Assignment",10,10],
-["End Term",50,46]
-],
-eee:[
-["Mid Term I",25,23],
-["Mid Term II",25,25],
-["Assignment",10,7],
-["End Term",40,37]
-],
-chem:[
-["Internal Assessment",10,8],
-["Mid Term II",15,14],
-["End Term",40,39],
-["Lab Exam",20,20],
-["Mid Term",15,12]
-],
-entre:[
-["Offline Quiz",15,15],
-["Project",40,30],
-["Assignment",30,25],
-["Class Participation",15,14]
-],
-media:[
-["Assignment",30,15],
-["Project",70,60]
-]
-};
+function login(){
+let user=document.getElementById("username").value;
+let pass=document.getElementById("password").value;
 
-let currentCourse="";
-
-function loadCourse(course){
-currentCourse=course;
-let data=courses[course];
-let table="<tr><th>Parameter</th><th>Out of</th><th>Marks</th></tr>";
-let total=0;
-let max=0;
-
-for(let i=0;i<data.length;i++){
-table+=`<tr>
-<td>${data[i][0]}</td>
-<td>${data[i][1]}</td>
-<td><input type='number' value='${data[i][2]}'></td>
-</tr>`;
-total+=data[i][2];
-max+=data[i][1];
+if(user==="se25ucse174@mahindrauniversity.edu.in" 
+&& pass==="SRIKAR31"){
+document.getElementById("loginPage").style.display="none";
+document.getElementById("mainContent").style.display="block";
+}else{
+document.getElementById("error").innerText="Invalid Credentials";
 }
-
-document.getElementById("courseTitle").innerText="Selected Course";
-document.getElementById("marksTable").innerHTML=table;
-
-let percent=(total/max)*100;
-let grade="";
-if(percent>=90) grade="A+";
-else if(percent>=80) grade="A";
-else if(percent>=70) grade="B";
-else if(percent>=60) grade="C";
-else grade="D";
-
-document.getElementById("grade").innerText="Total: "+total+"/"+max+" | Grade: "+grade;
-}
-
-function saveMarks(){
-alert("Marks Saved Successfully!");
 }
 
 </script>
